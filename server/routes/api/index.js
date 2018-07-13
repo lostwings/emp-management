@@ -29,6 +29,10 @@ const workExperience = require('./workExperience');
 const leaveHistory = require('./leaveHistory');
 const toeic = require('./toeic');
 const promoteHistory = require('./promoteHistory');
+const line = require('./line');
+const probation = require('./probation');
+const performance = require('./performance');
+const selfAssessment = require('./selfAssessment');
 
 router.use('/employee-info', employeeInfo);
 
@@ -89,5 +93,13 @@ router.use('/leave-history', leaveHistory);
 router.use('/toeic', toeic);
 
 router.use('/promote-history', promoteHistory);
+
+router.use('/line', line);
+
+router.use('/probation', probation);
+
+router.use('/performance', performance);
+
+router.use('/selfassessment', selfAssessment);
 
 module.exports = router;

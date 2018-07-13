@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Grid, Header, Icon, Table, Button } from 'semantic-ui-react';
 
+const membersDetail = memberDetail => (
+  <Table.Row>
 const membersDetail = (memberDetail, projectId, onDeleteClick) => (
   <Table.Row key={memberDetail.userId}>
     <Table.Cell>{memberDetail.userId || '-'}</Table.Cell>
@@ -9,6 +11,7 @@ const membersDetail = (memberDetail, projectId, onDeleteClick) => (
     <Table.Cell>{memberDetail.name || '-'}</Table.Cell>
     <Table.Cell>{memberDetail.role || '-'}</Table.Cell>
     <Table.Cell>
+      <Button animated="fade" style={{ borderStyle: 'solid', borderColor: '#FF0000', backgroundColor: 'white', borderWidth: '1px' }} >
       <Button animated="fade" style={{ borderStyle: 'solid', borderColor: '#FF0000', backgroundColor: 'white', borderWidth: '1px' }} onClick={() => onDeleteClick(memberDetail.userId, projectId)}>
         <Button.Content visible><font color="#FF0000" >Delete</font></Button.Content>
         <Button.Content hidden > <Icon color="red" name="user delete" /> </Button.Content>
@@ -17,6 +20,7 @@ const membersDetail = (memberDetail, projectId, onDeleteClick) => (
   </Table.Row>
 );
 
+const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick }) => (
 const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteMemberClick }) => (
   <Segment.Group raised size="large" >
     <Segment>
@@ -37,6 +41,7 @@ const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteM
       </Grid>
     </Segment>
     <Segment>
+      <Grid Columns={2} padded>
       <Grid columns={2} padded>
         <Grid.Column width={1} only="large screen" />
         <Grid.Column computer={4} mobile={16} tablet={4}><font size="4"><b>Project No. :</b></font></Grid.Column>
@@ -45,6 +50,7 @@ const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteM
         <Grid.Column computer={4} mobile={16} tablet={4} ><font size="4"><b>Project Name :</b></font></Grid.Column>
         <Grid.Column computer={11} mobile={16} tablet={11} >{projectDetail.name || '-'}</Grid.Column>
         <Grid.Column width={1} only="large screen" />
+        <Grid.Column computer={4} tablet={4} mobile={16} ><font size="4"><b>Quotation Number :</b></font></Grid.Column>
         <Grid.Column computer={4} tablet={4} mobile={16} ><font size="4"><b>Quotation No. :</b></font></Grid.Column>
         <Grid.Column computer={11} tablet={11} mobile={16}>{projectDetail.quotationId || '-'}</Grid.Column>
         <Grid.Column width={1} only="large screen" />
@@ -54,6 +60,7 @@ const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteM
         <Grid.Column computer={4} tablet={4} mobile={16} ><font size="4"><b>Purchased Order :</b></font></Grid.Column>
         <Grid.Column computer={11} tablet={11} mobile={16}>{projectDetail.purchasedOrder || '-'}</Grid.Column>
         <Grid.Column width={1} only="large screen" />
+        <Grid.Column computer={4} tablet={4} mobile={16} ><font size="4"><b>Quotation No. :</b></font></Grid.Column>
         <Grid.Column computer={4} tablet={4} mobile={16} ><font size="4"><b>Amount :</b></font></Grid.Column>
         <Grid.Column computer={11} tablet={11} mobile={16}>{projectDetail.amount || '-'}</Grid.Column>
         <Grid.Column width={1} only="large screen" />
@@ -102,6 +109,7 @@ const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteM
           </Table.Row>
         </Table.Header>
         <Table.Body>
+          {projectDetail.members.map(memberDetail => membersDetail(memberDetail))}
           {projectDetail.members.map(memberDetail => membersDetail(memberDetail, projectDetail.id, onDeleteMemberClick))}
         </Table.Body>
       </Table>
@@ -112,6 +120,7 @@ const ProjectDetail = ({ projectDetail, onEditClick, onAddMemberClick, onDeleteM
 ProjectDetail.propTypes = {
   projectDetail: PropTypes.object.isRequired,
   onEditClick: PropTypes.func.isRequired,
+  onAddMemberClick: PropTypes.func.isRequired
   onAddMemberClick: PropTypes.func.isRequired,
   onDeleteMemberClick: PropTypes.func.isRequired
 };

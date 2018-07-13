@@ -1,11 +1,14 @@
 const router = require('express').Router();
 const TimesheetController = require('../../controllers/TimesheetController');
+const { can } = require('../../middlewares');
 
-router.post('/', TimesheetController.create);
+router.post('/', can(['timesheetAddOwn']), TimesheetController.create);
 
-router.put('/', TimesheetController.update);
+router.put('/', can(['timesheetEditOwn']), TimesheetController.update);
 
-router.get('/', TimesheetController.findByMonthAndYear);
+router.get('/', can(['timesheetViewOwn']), TimesheetController.findByMonthAndYear);
+
+router.delete('/', can(['timesheetDeleteOwn']), TimesheetController.delete);
 
 router.delete('/', TimesheetController.delete);
 

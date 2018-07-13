@@ -11,11 +11,13 @@ exports.signin = (req, res, next) => {
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const token = jwt.sign({
             id: user.id,
-            username: user.username
+            username: user.username,
+            type: user.type,
           }, jwtSecret);
           res.json({
             id: user.id,
             username: user.username,
+            type: user.type,
             token
           });
         }

@@ -1,11 +1,94 @@
 import * as actionTypes from '../constants/actionTypes';
 
 const initialState = {
-  isFetching: true
+  isFetching: true,
+  edited: false,
+  proFetching: false,
+  item: {currentPage: 0}
 };
 
 const profile = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_PROBATION_STORE:
+      return {
+        ...state,
+        edited: false,
+        evaInfo: null,
+        perfInfo: null,
+        selfInfo: null
+      }
+    case actionTypes.UPDATE_PROBATION_STORE:
+      var edited;
+      if(action.payload.type=='probation'){
+        if(action.payload.item.passPro && !action.payload.item.confirmed) {
+          if(action.payload.item.basedSalary || action.payload.item.mobile || action.payload.item.transporationAllowance || action.payload.item.otherAllowance)edited = true;
+          else edited = false;
+        }else edited = true;
+      }else if(action.payload.type=='performance'){
+        edited = true
+      }else if(action.payload.type=='selfassessment'){
+        if(action.payload.item.validate) edited = true;
+        else edited = false;
+      }
+      return {
+        ...state,
+        item: action.payload.item,
+        edited: edited
+      };
+    case actionTypes.SELFASSESSMENT_FETCH_REQUEST:
+      return{
+        ...state,
+        proFetching: true,
+        id: action.payload.id
+      };
+    case actionTypes.SELFASSESSMENT_FETCH_SUCCESS:
+      return {
+        ...state,
+        proFetching: false,
+        ...action.payload.profile
+      };
+    case actionTypes.SELFASSESSMENT_FETCH_FAILURE:
+      return {
+        ...state,
+        proFetching: false,
+        message: action.payload.message
+      };
+    case actionTypes.PERFORMANCE_FETCH_REQUEST:
+      return{
+        ...state,
+        proFetching: true,
+        id: action.payload.id
+      };
+    case actionTypes.PERFORMANCE_FETCH_SUCCESS:
+      return {
+        ...state,
+        proFetching: false,
+        ...action.payload.profile
+      };
+    case actionTypes.PERFORMANCE_FETCH_FAILURE:
+      return {
+        ...state,
+        proFetching: false,
+        message: action.payload.message
+      };
+    case actionTypes.PROBATION_FETCH_REQUEST:
+      return{
+        ...state,
+        proFetching: true,
+        id: action.payload.id
+      };
+    case actionTypes.PROBATION_FETCH_SUCCESS:
+      return {
+        ...state,
+        proFetching: false,
+        ...action.payload.profile
+      };
+    case actionTypes.PROBATION_FETCH_FAILURE:
+      return {
+        ...state,
+        proFetching: false,
+        message: action.payload.message
+      };
     case actionTypes.PROFILE_FETCH_REQUEST:
       return {
         ...state,
@@ -22,21 +105,28 @@ const profile = (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
+        submitting: false,
         message: action.payload.message
       };
     case actionTypes.PROFILE_UPDATE_REQUEST:
       return {
         ...state,
+        submitting: true,
         form: action.payload.form
       };
     case actionTypes.PROFILE_UPDATE_SUCCESS:
       return {
         ...state,
+        submitting: false,
+        edited:false,
+        item:null,
         ...action.payload.profile
       };
     case actionTypes.PROFILE_UPDATE_FAILURE:
       return {
         ...state,
+        submitting: false,
+        item:null,
         message: action.payload.message
       };
     case actionTypes.PROFILE_DELETE_REQUEST:
@@ -49,7 +139,7 @@ const profile = (state = initialState, action) => {
     case actionTypes.PROFILE_DELETE_SUCCESS:
       return {
         ...state,
-        [`${action.payload.profileType}s`]: state[`${action.payload.profileType}s`].filter(p => p.userId !== action.payload.profileId),
+        [action.payload.profileType]: action.payload.profile,
         isDeleting: false
       };
     case actionTypes.PROFILE_DELETE_FAILURE:

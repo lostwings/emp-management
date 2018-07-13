@@ -9,7 +9,8 @@ if (token) {
     isFetching: false,
     isAuthenticated: true,
     id: user.id,
-    username: user.username
+    username: user.username,
+    type: user.type
   };
 }
 else {
@@ -33,7 +34,8 @@ const auth = (state = initialState, action) => {
         isFetching: false,
         isAuthenticated: true,
         id: action.payload.user.id,
-        username: action.payload.user.username
+        username: action.payload.user.username,
+        type: action.payload.user.type
       };
     case actionTypes.LOGIN_FAILURE:
       return {

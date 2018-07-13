@@ -54,11 +54,14 @@ exports.update = (req, res, next) => {
 };
 
 exports.updateProfileImg = (req, res, next) => {
-  console.log(req.body);
+  EmployeeInfo.updateProfileImg(`/static/${req.file.destination}/${req.file.filename}`, req.user.id)
+    .then(() => {
+      res.json('upload complete!!!');
+    });
   const path = `/static/profile-img/${req.file.filename}`;
   // for admin
   if (req.accessControl.employeeInfoEditAll) {
-    EmployeeInfo.updateProfileImg(path, req.body.userId)
+    EmployeeInfo.updateProfileImg(path, req.body.userId, req.user.id)
       .then(() => {
         res.json({ path });
       })
@@ -67,7 +70,7 @@ exports.updateProfileImg = (req, res, next) => {
   // for user
   else if (req.accessControl.employeeInfoEditOwn) {
     if (req.body.userId === req.user.id) {
-      EmployeeInfo.updateProfileImg(path, req.body.userId)
+      EmployeeInfo.updateProfileImg(path, req.body.userId, req.user.id)
         .then(() => {
           res.json({ path });
         })

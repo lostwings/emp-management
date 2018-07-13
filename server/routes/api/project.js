@@ -10,4 +10,6 @@ router.get('/', can(['projectViewAll', 'projectViewOwn']), ProjectController.fin
 
 router.delete('/', can(['projectDelete']), ProjectController.delete);
 
+router.get('/', ProjectController.findAll);
+
 module.exports = router;

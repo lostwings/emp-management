@@ -31,9 +31,9 @@ const AssetProfileBox = ({ assetsProfile, onAddClick, onDeleteClick, can }) => (
       key={p.id}
       lists={[
         { key: 'assetName', title: 'Name', value: p.assetName },
+        { key: 'assetTypeName', title: 'Asset type', value: p.assetTypeName },
         { key: 'serialNumber', title: 'Serial No.', value: p.serialNumber },
-        { key: 'date', title: 'Date', value: p.assetDate },
-        { key: 'description', title: 'Description', value: p.description }
+        { key: 'date', title: 'Date', value: p.assetDate }
       ]}
       onDeleteClick={() => onDeleteClick(p.id)}
       deleted={can.hasAssetDelete}
@@ -57,7 +57,7 @@ const mapDispatchToProps = dispatch => ({
   onDeleteClick: profileId => dispatch(openModal(modalNames.CONFIRM, {
     header: 'Delete confirmation',
     description: 'Are you sure to delete asset profile?',
-    onConfirm: () => dispatch(deleteProfileRequest('asset', profileId))
+    onConfirm: () => dispatch(deleteProfileRequest('assets', profileId))
   }))
 });
 

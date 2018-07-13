@@ -10,6 +10,7 @@ require('./config/passport')(passport);
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
+app.use('/static', express.static(path.resolve(__dirname, 'storage', 'public')));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

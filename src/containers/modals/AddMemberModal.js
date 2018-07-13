@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isSubmitting } from 'redux-form';
 import { closeModal } from '../../actions/modal';
+import { createProjectRequest } from '../../actions/project';
 import { createMemberRequest } from '../../actions/projectDetail';
 import Modal from '../../components/Modal';
 import AddMemberForm from '../forms/AddMemberForm';
@@ -33,6 +34,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onClose: () => dispatch(closeModal()),
+
+  onSubmit: values => handleReduxFormSubmit(dispatch, createProjectRequest, values),
   onSubmit: values => handleReduxFormSubmit(dispatch, createMemberRequest, values),
   onClick: () => dispatch(submit('addMember'))
 });

@@ -18,6 +18,10 @@ import EditProjectModal from './modals/EditProjectModal';
 import AddMemberModal from './modals/AddMemberModal';
 import AddTimesheetModal from './modals/AddTimesheetModal';
 import EditTimesheetModal from './modals/EditTimesheetModal';
+import AddWorkExperienceProfileModal from './modals/AddWorkExperienceProfileModal';
+import AddProbation from './modals/AddProbation';
+import AddPerformance from './modals/AddPerformance';
+import AddSelfAssessment from './modals/AddSelfAssessment';
 
 const renderModal = ({ name, props }) => {
   switch (name) {
@@ -55,6 +59,14 @@ const renderModal = ({ name, props }) => {
       return <AddTimesheetModal {...props} />;
     case modalNames.EDIT_TIMESHEET:
       return <EditTimesheetModal {...props} />;
+    case modalNames.ADD_WORK_EXPERIENCE_PROFILE:
+      return <AddWorkExperienceProfileModal />;
+    case modalNames.ADD_PROBATION:
+      return <AddProbation {...props} />;
+    case modalNames.ADD_PERFORMANCE:
+      return <AddPerformance {...props} />;
+    case modalNames.ADD_SELFASSESSMENT:
+      return <AddSelfAssessment {...props} />;
     default:
       return <div />;
   }

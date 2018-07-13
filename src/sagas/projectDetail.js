@@ -6,6 +6,9 @@ import {
   updateProjectDetailSuccess,
   updateProjectDetailFailure,
   createMemberSuccess,
+
+  createMemberFailure
+} from '../actions/projectDetail';
   createMemberFailure,
   deleteMemberSuccess,
   deleteMemberFailure
@@ -27,6 +30,9 @@ export function* updateProjectDetailTask(action) {
   try {
     const projectDetail = yield call(api.updateProjectDetail, { project: action.payload.form });
     yield put(updateProjectDetailSuccess(projectDetail));
+  }
+  catch (error) {
+    yield put(updateProjectDetailFailure(error));
     yield put(closeModal());
     action.payload.resolve();
   }
@@ -40,6 +46,9 @@ export function* createMemberTask(action) {
   try {
     const members = yield call(api.createMember, { hasProject: action.payload.form });
     yield put(createMemberSuccess(members));
+  }
+  catch (error) {
+    yield put(createMemberFailure(error));
     yield put(closeModal());
     action.payload.resolve();
   }
@@ -83,6 +92,7 @@ export default function* projectDetailSaga() {
   yield all([
     watchFetchProjectDetailRequest(),
     watchUpdateProjectDetailRequest(),
+    watchCreateMemberRequest()
     watchCreateMemberRequest(),
     watchDeleteMemberRequest()
   ]);

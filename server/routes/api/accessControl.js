@@ -3,6 +3,7 @@ const AccessControlController = require('../../controllers/AccessControlControll
 
 router.post('/', AccessControlController.create);
 
+router.get('/', AccessControlController.findAll);
 router.get('/', AccessControlController.find);
 
 module.exports = router;

@@ -33,8 +33,7 @@ const CertificateProfileBox = ({ certificatesProfile, onAddClick, onDeleteClick,
         { key: 'name', title: 'Name', value: p.name },
         { key: 'institute', title: 'Institute', value: p.institute },
         { key: 'certificateDate', title: 'Certificate date', value: p.certificateDate },
-        { key: 'score', title: 'Score', value: p.score },
-        { key: 'description', title: 'Description', value: p.description },
+        { key: 'score', title: 'Score', value: p.score }
       ]}
       onDeleteClick={() => onDeleteClick(p.id)}
       deleted={can.hasCertificateDelete}
@@ -58,7 +57,7 @@ const mapDispatchToProps = dispatch => ({
   onDeleteClick: profileId => dispatch(openModal(modalNames.CONFIRM, {
     header: 'Delete confirmation',
     description: 'Are you sure to delete certification profile?',
-    onConfirm: () => dispatch(deleteProfileRequest('certificate', profileId))
+    onConfirm: () => dispatch(deleteProfileRequest('certificates', profileId))
   }))
 });
 

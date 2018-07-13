@@ -23,4 +23,8 @@ Toeic.delete = id => (
   db.none('DELETE FROM toeic WHERE id = $1', [id])
 );
 
+Toeic.findById = id => (
+  db.one('SELECT * FROM toeic WHERE id = $1', [id])
+);
+
 module.exports = Toeic;

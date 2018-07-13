@@ -61,19 +61,21 @@ const calTotalHours = (timeIn, timeOut) => new Promise((resolve, reject) => {
 const createTimesheet = (newTimesheetArray, id) => new Promise((resolve, reject) => {
   try {
     newTimesheetArray.forEach((timesheet) => {
-      const newTimesheet = {};
-      newTimesheet.userId = timesheet.userId;
-      newTimesheet.date = timesheet.date;
-      newTimesheet.projectId = timesheet.projectId;
-      newTimesheet.timeIn = timesheet.timeIn;
-      newTimesheet.timeOut = timesheet.timeOut;
-      newTimesheet.task = timesheet.task;
-      newTimesheet.description = timesheet.description;
-      calTotalHours(newTimesheet.timeIn, newTimesheet.timeOut)
-        .then((totalhours) => {
-          newTimesheet.totalhours = totalhours;
-          Timesheet.create(newTimesheet, id);
-        });
+      if (timesheet.userId === id) {
+        const newTimesheet = {};
+        newTimesheet.userId = timesheet.userId;
+        newTimesheet.date = timesheet.date;
+        newTimesheet.projectId = timesheet.projectId;
+        newTimesheet.timeIn = timesheet.timeIn;
+        newTimesheet.timeOut = timesheet.timeOut;
+        newTimesheet.task = timesheet.task;
+        newTimesheet.description = timesheet.description;
+        calTotalHours(newTimesheet.timeIn, newTimesheet.timeOut)
+          .then((totalhours) => {
+            newTimesheet.totalhours = totalhours;
+            Timesheet.create(newTimesheet, id);
+          });
+      }
     });
     resolve('Create Finish!');
   }
@@ -99,22 +101,30 @@ exports.create = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   const editTimesheet = req.body.timesheet;
-  const month = moment(editTimesheet.date, 'YYYY-MM-DD').month() + 1;
-  const year = moment(editTimesheet.date, 'YYYY-MM-DD').year();
-  const { userId } = editTimesheet;
-  calTotalHours(editTimesheet.timeIn, editTimesheet.timeOut)
-    .then((totalhours) => {
-      editTimesheet.totalhours = totalhours;
-      Timesheet.update(editTimesheet, req.user.id)
-        .then(() => {
-          Timesheet.findByMonthAndYear(month, year, userId)
-            .then((timesheets) => {
-              res.json(timesheets);
-            })
-            .catch(next);
-        })
-        .catch(next);
+  if (editTimesheet.userId === req.user.id) {
+    const month = moment(editTimesheet.date, 'YYYY-MM-DD').month() + 1;
+    const year = moment(editTimesheet.date, 'YYYY-MM-DD').year();
+    const { userId } = editTimesheet;
+    calTotalHours(editTimesheet.timeIn, editTimesheet.timeOut)
+      .then((totalhours) => {
+        editTimesheet.totalhours = totalhours;
+        Timesheet.update(editTimesheet, req.user.id)
+          .then(() => {
+            Timesheet.findByMonthAndYear(month, year, userId)
+              .then((timesheets) => {
+                res.json(timesheets);
+              })
+              .catch(next);
+          })
+          .catch(next);
+      })
+      .catch(next);
+  }
+  else {
+    res.status(401).json({
+      message: `You don't have permission to do this.`
     });
+  }
 };
 
 exports.findByUserId = (req, res, next) => {
@@ -126,21 +136,39 @@ exports.findByUserId = (req, res, next) => {
 };
 
 exports.findByMonthAndYear = (req, res, next) => {
-  Timesheet.findByMonthAndYear(req.query.month, req.query.year, req.query.userId)
-    .then((timesheets) => {
-      res.json(timesheets);
-    })
-    .catch(next);
+  if (parseInt(req.query.userId, 10) === req.user.id) {
+    Timesheet.findByMonthAndYear(req.query.month, req.query.year, req.query.userId)
+      .then((timesheets) => {
+        res.json(timesheets);
+      })
+      .catch(next);
+  }
+  else {
+    res.status(401).json({
+      message: `You don't have permission to do this.`
+    });
+  }
 };
 
 exports.delete = (req, res, next) => {
-  Timesheet.delete(req.body.id)
-    .then(() => {
-      Timesheet.findByUserId(req.body.id)
-        .then((timesheets) => {
-          res.json(timesheets);
-        })
-        .catch(next);
+  Timesheet.findById(req.body.id)
+    .then((timesheet) => {
+      if (timesheet.userId === req.user.id) {
+        Timesheet.delete(req.body.id)
+          .then(() => {
+            Timesheet.findByUserId(req.body.id)
+              .then((timesheets) => {
+                res.json(timesheets);
+              })
+              .catch(next);
+          })
+          .catch(next);
+      }
+      else {
+        res.status(401).json({
+          message: `You don't have permission to do this.`
+        });
+      }
     })
     .catch(next);
 };

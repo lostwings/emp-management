@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
   onDeleteClick: profileId => dispatch(openModal(modalNames.CONFIRM, {
     header: 'Delete confirmation',
     description: 'Are you sure to delete this education profile?',
-    onConfirm: () => dispatch(deleteProfileRequest('education', profileId))
+    onConfirm: () => dispatch(deleteProfileRequest('educations', profileId))
   }))
 });
 

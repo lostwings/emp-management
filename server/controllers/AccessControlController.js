@@ -10,6 +10,12 @@ exports.create = (req, res, next) => {
     .catch(next);
 };
 
+exports.findAll = (req, res, next) => {
+  AccessControl.findAll()
+    .then((accessControls) => {
+      res.json(accessControls);
+    })
+    .catch(next);
 exports.find = (req, res, next) => {
   if (req.query.all === 'true') {
     AccessControl.findAll()

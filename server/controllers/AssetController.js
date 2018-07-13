@@ -2,6 +2,9 @@ const Asset = require('../models/Asset');
 
 exports.create = (req, res, next) => {
   const newAsset = req.body.asset;
+  if (req.file) {
+    newAsset.picture = `/server/storage/private/asset/${req.file.filename}`;
+  }
   Asset.create(newAsset, req.user.id)
     .then((createdAsset) => {
       res.json(createdAsset);
